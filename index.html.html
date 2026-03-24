@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Initiatives Landscape — Falck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #1a1a2e; min-height: 100vh; }
+
+  /* OUTER CONTAINER */
+  .page-wrap { max-width: 1340px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.06); }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #C8102E 0%, #9B0022 100%); color: white; padding: 14px 36px; display: flex; justify-content: space-between; align-items: center; }
+  .header h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .header .sub { font-size: 11px; opacity: 0.8; margin-top: 1px; }
+  .header .brand { font-size: 26px; font-weight: 900; letter-spacing: 2px; }
+
+  /* ===== TABS ===== */
+  .tab-bar {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid #eee;
+    padding: 0 24px;
+  }
+  .tab-btn {
+    padding: 12px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .tab-btn:hover { color: #C8102E; }
+  .tab-btn.active { color: #C8102E; }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #C8102E;
+    border-radius: 3px 3px 0 0;
+  }
+
+  /* TAB CONTENT */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ===== TAB 1: LANDSCAPE ===== */
+  .goal-state {
+    margin: 16px 24px 0;
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+    border-radius: 14px;
+    padding: 20px 32px;
+    color: white;
+    text-align: center;
+  }
+  .goal-state h2 { font-size: 22px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; }
+  .goal-state p { font-size: 12.5px; font-weight: 400; opacity: 0.92; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+  .goal-state .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 3px 14px; border-radius: 20px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 8px; }
+
+  .arrow-connector { text-align: center; padding: 6px 0; color: #2E7D32; font-size: 18px; font-weight: 700; }
+
+  .enabled-box {
+    margin: 0 24px 12px;
+    border: 2.5px solid #C8102E;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .enabled-header {
+    background: #C8102E;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+  }
+  .enabled-header h3 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; }
+
+  .pillars { display: grid; grid-template-columns: 1.1fr 0.9fr 0.9fr; gap: 0; }
+  .pillar { padding: 14px 16px; border-right: 1px solid #eee; }
+  .pillar:last-child { border-right: none; }
+  .pillar-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #C8102E; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #C8102E; }
+
+  .track-card { background: #fff; border: 1.5px solid #ddd; border-radius: 8px; padding: 9px 12px; margin-bottom: 7px; transition: all 0.2s; }
+  .track-card:hover { border-color: #C8102E; box-shadow: 0 2px 8px rgba(200,16,46,0.08); }
+  .track-card .tn { font-size: 11.5px; font-weight: 700; color: #1a1a2e; margin-bottom: 2px; }
+  .track-card .td { font-size: 10px; color: #666; line-height: 1.4; }
+  .track-card .tc { font-size: 9.5px; font-weight: 600; color: #C8102E; margin-top: 3px; }
+
+  .dept-card {
+    background: #f8f0ff;
+    border: 2px solid #7B1FA2;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 8px;
+  }
+  .dept-card .dept-label { font-size: 10px; font-weight: 700; color: #7B1FA2; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .dept-card .dept-bullet { font-size: 10px; line-height: 1.5; padding: 2px 0 2px 14px; position: relative; color: #333; }
+  .dept-card .dept-bullet::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; background: #7B1FA2; border-radius: 50%; }
+  .dept-card .dept-note { font-size: 9px; color: #7B1FA2; font-style: italic; margin-top: 6px; padding-top: 5px; border-top: 1px dashed #cba8e8; }
+
+  .pb { font-size: 10.5px; line-height: 1.55; padding: 3px 0 3px 14px; position: relative; color: #444; }
+  .pb::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; background: #C8102E; border-radius: 50%; }
+  .pb-note { font-size: 9.5px; color: #888; font-style: italic; margin-top: 6px; }
+
+  /* ===== TAB 2: STRATEGY MAP ===== */
+  .strategy-content { padding: 24px; }
+  .strategy-content h2 { font-size: 18px; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; }
+  .strategy-content .insight-box {
+    background: linear-gradient(135deg, #E8F5E9, #f0fdf4);
+    border-left: 4px solid #2E7D32;
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 24px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #1B5E20;
+  }
+  .strategy-content .insight-box strong { font-weight: 700; }
+
+  /* Interactive diagram section */
+  .diagram-section {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .diagram-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #C8102E;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .diagram-section h3 .icon { font-size: 18px; }
+
+  /* Strategy flow diagram */
+  .strategy-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .sf-node {
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    width: 100%;
+    max-width: 600px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .sf-node:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .sf-node .sf-sub { font-size: 11px; font-weight: 400; opacity: 0.85; margin-top: 4px; }
+  .sf-goal { background: linear-gradient(135deg, #1B5E20, #2E7D32); color: white; }
+  .sf-enabled { background: #C8102E; color: white; }
+  .sf-arrow { font-size: 20px; color: #2E7D32; font-weight: 900; padding: 6px 0; }
+
+  /* Three pillars row */
+  .sf-pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 0;
+  }
+  .sf-pillar-card {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .sf-pillar-card:hover { border-color: #C8102E; box-shadow: 0 4px 16px rgba(200,16,46,0.12); }
+  .sf-pillar-card.active { border-color: #C8102E; background: #fff5f5; box-shadow: 0 4px 16px rgba(200,16,46,0.12); }
+  .sf-pillar-card .pname { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #C8102E; }
+  .sf-pillar-card .picon { font-size: 22px; margin-bottom: 6px; }
+  .sf-pillar-card .pdesc { font-size: 10px; color: #666; margin-top: 4px; line-height: 1.4; }
+
+  /* Pillar detail panel */
+  .pillar-detail {
+    display: none;
+    background: white;
+    border: 2px solid #C8102E;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 14px;
+    width: 100%;
+    max-width: 600px;
+    animation: fadeIn 0.3s ease;
+  }
+  .pillar-detail.active { display: block; }
+  .pillar-detail h4 { font-size: 14px; font-weight: 700; color: #C8102E; margin-bottom: 10px; }
+  .pillar-detail .detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #333;
+  }
+  .pillar-detail .detail-item:last-child { border-bottom: none; }
+  .pillar-detail .detail-item .di-icon { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .pillar-detail .detail-item strong { font-weight: 600; color: #1a1a2e; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Training pyramid */
+  .pyramid-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+  }
+  .pyr-tier {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .pyr-tier:hover { transform: scale(1.03); box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+  .pyr-tech { background: #FFE0B2; border: 2px solid #E65100; width: 300px; }
+  .pyr-int { background: #C8E6C9; border: 2px solid #2E7D32; width: 420px; }
+  .pyr-fnd { background: #BBDEFB; border: 2px solid #1565C0; width: 540px; }
+  .pyr-tier .pyr-count { font-weight: 400; opacity: 0.7; margin-left: 8px; font-size: 11px; }
+
+  /* Intermediate journey */
+  .journey-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding: 10px 0;
+  }
+  .journey-step {
+    flex: 1;
+    min-width: 140px;
+    padding: 14px 12px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .journey-step:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .journey-step .js-num { font-size: 10px; font-weight: 700; opacity: 0.6; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .journey-step .js-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .journey-step .js-desc { font-size: 10px; opacity: 0.8; line-height: 1.4; }
+  .journey-step .js-time { font-size: 9.5px; font-weight: 600; margin-top: 6px; opacity: 0.6; }
+  .journey-arrow { display: flex; align-items: center; color: #aaa; font-size: 20px; font-weight: 900; padding: 0 2px; flex-shrink: 0; }
+
+  .js-1 { background: #E3F2FD; color: #0D47A1; }
+  .js-2 { background: #FFF3E0; color: #BF360C; }
+  .js-3 { background: #FCE4EC; color: #880E4F; }
+  .js-4 { background: #F3E5F5; color: #4A148C; }
+  .js-5 { background: #E8F5E9; color: #1B5E20; }
+
+  /* Comparison table */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+  .comp-table thead th {
+    background: #C8102E;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .comp-table tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.5;
+    color: #333;
+    vertical-align: top;
+  }
+  .comp-table tbody tr:nth-child(even) { background: #fafafa; }
+  .comp-table tbody tr:hover { background: #fff5f5; }
+  .comp-table .dim { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  /* Skills library section */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .skill-card {
+    background: white;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .skill-card:hover { border-color: #C8102E; box-shadow: 0 3px 12px rgba(200,16,46,0.08); }
+  .skill-card .sk-icon { font-size: 28px; margin-bottom: 8px; }
+  .skill-card .sk-title { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .skill-card .sk-desc { font-size: 10.5px; color: #666; line-height: 1.5; }
+
+  /* Open questions */
+  .questions-list { list-style: none; counter-reset: q; }
+  .questions-list li {
+    counter-increment: q;
+    padding: 10px 0 10px 36px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #333;
+    position: relative;
+  }
+  .questions-list li::before {
+    content: counter(q);
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 24px;
+    height: 24px;
+    background: #C8102E;
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .questions-list li strong { font-weight: 600; color: #1a1a2e; }
+
+  /* FOOTER */
+  .footer { background: #f8f8f8; padding: 8px 36px; display: flex; justify-content: space-between; font-size: 9px; color: #aaa; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <h1>AI Initiatives Landscape</h1>
+    <div class="sub">2026</div>
+  </div>
+  <div class="brand">FALCK</div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('landscape')">Landscape</button>
+  <button class="tab-btn" onclick="switchTab('strategy')">Strategy Deep Dive</button>
+</div>
+
+<!-- ==================== TAB 1: LANDSCAPE ==================== -->
+<div id="tab-landscape" class="tab-content active">
+
+  <!-- GOAL STATE -->
+  <div class="goal-state">
+    <h2>AI FIRST</h2>
+    <p>The goal state — a cultural transformation where every employee, regardless of role, defaults to AI in their daily work. Not a tool, not a department. A behaviour: when you approach any task, AI is considered first.</p>
+    <div class="badge">GOAL STATE · APPLIES TO ALL ROLES & DEPARTMENTS</div>
+  </div>
+
+  <div class="arrow-connector">&#9660; achieved through &#9660;</div>
+
+  <!-- ENABLED BY AI -->
+  <div class="enabled-box">
+    <div class="enabled-header">
+      <h3>Enabled by AI</h3>
+    </div>
+
+    <div class="pillars">
+
+      <!-- TRAININGS -->
+      <div class="pillar">
+        <div class="pillar-title">Trainings</div>
+        <div class="track-card">
+          <div class="tn">Foundation Track</div>
+          <div class="td">AI basics & literacy, CRAFT prompting, 3 R's use case discovery, agents, responsible AI, Falck GPT</div>
+          <div class="tc">~250 employees · 5.5h · 3 waves (Apr–Nov)</div>
+        </div>
+        <div class="track-card">
+          <div class="tn">Intermediate Track</div>
+          <div class="td">Build own AI solutions. Workshop → Hackathon → Coaching → Showcase. Copilot Studio or Claude Cowork</div>
+          <div class="tc">~50-70 employees · 2 waves (May + Sept)</div>
+        </div>
+        <div class="track-card">
+          <div class="tn">Technical Track</div>
+          <div class="td">Dev-level AI skills, AI-assisted coding, GitHub Copilot workflows, role-based learning</div>
+          <div class="tc">~90 employees · 3 waves</div>
+        </div>
+        <div class="dept-card">
+          <div class="dept-label">AI First — Data Insights & AI Dept</div>
+          <div class="dept-bullet"><strong>Proving ground</strong> for AI-first ways of working — validates before CFO scale-up</div>
+          <div class="dept-bullet"><strong>AI Fridays</strong> — dept-wide practice sessions on tools & techniques</div>
+          <div class="dept-bullet"><strong>Use Case & Skills Library</strong> — reusable prompts, agents, skills in a shared repo</div>
+          <div class="dept-bullet"><strong>Tool Onboarding</strong> — VS Code, Git, GitHub for non-devs</div>
+          <div class="dept-bullet"><strong>Structured Interviews</strong> — qualitative data on workflows & AI adoption</div>
+          <div class="dept-bullet"><strong>Team-level deep dives</strong> — per-team AI integration support</div>
+          <div class="dept-note">This model can be expanded to other departments. Each dept can run their own AI First practices with support from the central team.</div>
+        </div>
+      </div>
+
+      <!-- SOLUTIONS -->
+      <div class="pillar">
+        <div class="pillar-title">Solutions</div>
+        <div class="pb">AI-powered solution development for CFO business areas</div>
+        <div class="pb">21+ use cases identified through AI Discovery Workshops across Finance, Legal, M&A, Procurement, CTO</div>
+        <div class="pb">70% of identified use cases expected to deliver business value</div>
+        <div class="pb"><strong>Discovery → Development → Deployment</strong> lifecycle with value tracking</div>
+        <div class="pb">Capacity from UiPath migration (~June 2026) and AI team BAs redirected here</div>
+        <div class="pb-note" style="margin-top: 12px; font-size: 10px; color: #444; font-style: normal;"><strong>Pipeline highlights:</strong></div>
+        <div class="pb">AI-Powered Due Diligence (M&A)</div>
+        <div class="pb">Legal AI Hub (portfolio of 7+ agents)</div>
+        <div class="pb">Cash Flow Forecasting (Treasury)</div>
+        <div class="pb">Compliance Partner (Procurement)</div>
+        <div class="pb">Tender Support (cross-functional)</div>
+        <div class="pb">Oracle Process Training Assistant</div>
+      </div>
+
+      <!-- KNOWLEDGE REPO -->
+      <div class="pillar">
+        <div class="pillar-title">Knowledge Repo</div>
+        <div class="pb">Context-rich knowledge for CFO business areas — structuring what knowledge goes where</div>
+        <div class="pb">AI-ready institutional memory for key domains</div>
+        <div class="pb">How to structure knowledge, what folders, what use cases can be built from it</div>
+        <div class="pb">Powered by the Knowledge Repo Foundation platform (Vasyl's team)</div>
+        <div class="pb">Intermediate Track participants upload meetings & SharePoint as early adoption</div>
+        <div class="pb">Integration with Falck GPT V7 Knowledge Base feature</div>
+        <div class="pb-note" style="margin-top: 12px; font-size: 10px; color: #444; font-style: normal;"><strong>Key question:</strong></div>
+        <div class="pb">Technical solution exists (platform team builds it), but implementation — helping people understand what to put in their knowledge base and how to use it — falls on Enabled by AI</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: STRATEGY DEEP DIVE ==================== -->
+<div id="tab-strategy" class="tab-content">
+  <div class="strategy-content">
+
+    <!-- Key Insight -->
+    <h2>Strategy Deep Dive</h2>
+    <div class="insight-box">
+      <strong>AI First is a state of being, not an initiative.</strong> It is the goal — the cultural end-state where every employee, regardless of role, defaults to AI in their daily work. Enabled by AI is the parent initiative that houses all the actions, programmes, and workstreams driving the organisation toward that state. The training tracks are the "how." AI First is the "why" and the "where we're going."
+    </div>
+
+    <!-- Interactive Strategy Diagram -->
+    <div class="diagram-section">
+      <h3><span class="icon">&#127919;</span> Strategy Hierarchy — Click a pillar to explore</h3>
+      <div class="strategy-flow">
+
+        <div class="sf-node sf-goal">
+          AI FIRST
+          <div class="sf-sub">Goal state — every employee defaults to AI in their work</div>
+        </div>
+
+        <div class="sf-arrow">&#9660;</div>
+        <div style="font-size: 11px; color: #2E7D32; font-weight: 600; margin-bottom: 4px; text-align: center;">achieved through</div>
+
+        <div class="sf-node sf-enabled">
+          ENABLED BY AI
+          <div class="sf-sub">Parent initiative — Current scope: CFO Org</div>
+        </div>
+
+        <div class="sf-arrow">&#9660;</div>
+
+        <div class="sf-pillars">
+          <div class="sf-pillar-card" onclick="togglePillar('trainings')" id="pc-trainings">
+            <div class="picon">&#128218;</div>
+            <div class="pname">Trainings</div>
+            <div class="pdesc">Foundation, Intermediate, Technical tracks + AI First dept</div>
+          </div>
+          <div class="sf-pillar-card" onclick="togglePillar('solutions')" id="pc-solutions">
+            <div class="picon">&#9889;</div>
+            <div class="pname">Solutions</div>
+            <div class="pdesc">AI-powered solutions for CFO business areas</div>
+          </div>
+          <div class="sf-pillar-card" onclick="togglePillar('knowledge')" id="pc-knowledge">
+            <div class="picon">&#128209;</div>
+            <div class="pname">Knowledge Repo</div>
+            <div class="pdesc">AI-ready institutional memory</div>
+          </div>
+        </div>
+
+        <!-- Detail panels -->
+        <div class="pillar-detail" id="detail-trainings">
+          <h4>Trainings Pillar</h4>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#BBDEFB;">&#128218;</div>
+            <div><strong>Foundation Track</strong> — ~250 employees, 5.5h. AI basics, CRAFT prompting, 3 R's use case discovery, agents, responsible AI, Falck GPT. Three waves: Apr-Jun, Sept-Oct, Nov.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#C8E6C9;">&#9889;</div>
+            <div><strong>Intermediate Track</strong> — ~50-70 employees. Build own AI solutions over 8-10 weeks. Workshop → Hackathon → Coaching → Showcase. Two tools: Copilot Studio or Claude Cowork. Two waves: May + Sept.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#FFE0B2;">&#128736;</div>
+            <div><strong>Technical Track</strong> — ~90 developers/IT. AI-assisted coding, GitHub Copilot workflows, role-based learning. Three waves.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#E1BEE7;">&#11088;</div>
+            <div><strong>AI First — Data Dept</strong> — Proving ground. AI Fridays, skills library, tool onboarding, structured interviews, team-level deep dives. Experiments here get validated then scaled to CFO.</div>
+          </div>
+        </div>
+
+        <div class="pillar-detail" id="detail-solutions">
+          <h4>Solutions Pillar</h4>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#BBDEFB;">&#128270;</div>
+            <div><strong>Discovery</strong> — 21+ use cases identified through AI Discovery Workshops across Finance, Legal, M&A, Procurement, CTO.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#C8E6C9;">&#128736;</div>
+            <div><strong>Development</strong> — AI team BAs + capacity from UiPath migration (~June 2026) build solutions. 70% expected to deliver business value.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#FFE0B2;">&#128640;</div>
+            <div><strong>Pipeline highlights</strong> — AI Due Diligence (M&A), Legal AI Hub (7+ agents), Cash Flow Forecasting, Compliance Partner, Tender Support, Oracle Training Assistant.</div>
+          </div>
+        </div>
+
+        <div class="pillar-detail" id="detail-knowledge">
+          <h4>Knowledge Repo Pillar</h4>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#B2DFDB;">&#128209;</div>
+            <div><strong>Purpose</strong> — Context-rich, AI-ready institutional memory for CFO business areas. Structuring what knowledge goes where.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#C8E6C9;">&#128736;</div>
+            <div><strong>Platform</strong> — Powered by Knowledge Repo Foundation (Vasyl's team). Integrates with Falck GPT V7 Knowledge Base feature.</div>
+          </div>
+          <div class="detail-item">
+            <div class="di-icon" style="background:#FFE0B2;">&#10067;</div>
+            <div><strong>Key question</strong> — Technical solution exists, but implementation support — helping people understand what to put in their KB and how to use it — falls on Enabled by AI.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Training Pyramid -->
+    <div class="diagram-section">
+      <h3><span class="icon">&#128200;</span> Training Pyramid</h3>
+      <p style="font-size: 12px; color: #666; margin-bottom: 14px;">Three independent tracks forming a pyramid by participant volume. Not sequential — all lead to the AI First state.</p>
+      <div class="pyramid-wrap">
+        <div class="pyr-tier pyr-tech">&#128736; Technical<span class="pyr-count">~90 people · Dev-level AI skills</span></div>
+        <div class="pyr-tier pyr-int">&#9889; Intermediate<span class="pyr-count">~50-70 people · Build AI solutions</span></div>
+        <div class="pyr-tier pyr-fnd">&#128218; Foundation<span class="pyr-count">~250 people · AI basics & literacy</span></div>
+      </div>
+    </div>
+
+    <!-- Intermediate Journey -->
+    <div class="diagram-section">
+      <h3><span class="icon">&#128736;</span> Intermediate Track Learning Journey</h3>
+      <div class="journey-flow">
+        <div class="journey-step js-1">
+          <div class="js-num">STEP 1</div>
+          <div class="js-title">Workshop</div>
+          <div class="js-desc">Kick-off session. Use case ideation, tool demos</div>
+          <div class="js-time">1.5h</div>
+        </div>
+        <div class="journey-arrow">&#10132;</div>
+        <div class="journey-step js-2">
+          <div class="js-num">STEP 2</div>
+          <div class="js-title">Self-Paced</div>
+          <div class="js-desc">Online course, tool exploration. Copilot Studio or Claude Cowork assigned</div>
+          <div class="js-time">~2 weeks</div>
+        </div>
+        <div class="journey-arrow">&#10132;</div>
+        <div class="journey-step js-3">
+          <div class="js-num">STEP 3</div>
+          <div class="js-title">Hackathon</div>
+          <div class="js-desc">Build Day. MVP creation in breakout rooms</div>
+          <div class="js-time">4h</div>
+        </div>
+        <div class="journey-arrow">&#10132;</div>
+        <div class="journey-step js-4">
+          <div class="js-num">STEP 4</div>
+          <div class="js-title">Coaching</div>
+          <div class="js-desc">Office hours, 1:1 support to refine solutions</div>
+          <div class="js-time">~2 weeks</div>
+        </div>
+        <div class="journey-arrow">&#10132;</div>
+        <div class="journey-step js-5">
+          <div class="js-num">STEP 5</div>
+          <div class="js-title">Showcase</div>
+          <div class="js-desc">Present MVPs, celebrate learnings, next steps</div>
+          <div class="js-time">1.5h</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dept vs Org comparison -->
+    <div class="diagram-section">
+      <h3><span class="icon">&#128260;</span> AI First (Dept) vs. Enabled by AI (Org)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr><th>Dimension</th><th>AI First (Department)</th><th>Enabled by AI (CFO Org)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dim">Scope</td><td>Data Insights & AI dept</td><td>Entire CFO organisation </td></tr>
+          <tr><td class="dim">Nature</td><td>Ongoing R&D + advanced practices</td><td>Structured training programme with deadline</td></tr>
+          <tr><td class="dim">Position</td><td>Sits under Trainings pillar as proving ground</td><td>Parent initiative: Trainings, Solutions, Knowledge Repo</td></tr>
+          <tr><td class="dim">Mandate</td><td>Felipe's direct mandate; higher time investment</td><td>CFO-wide; 5h per employee commitment</td></tr>
+          <tr><td class="dim">Activities</td><td>AI Fridays, tool onboarding, skills library, structured interviews</td><td>Foundation/Intermediate/Technical tracks, workshops, hackathons</td></tr>
+          <tr><td class="dim">Cost centre</td><td>Department budget</td><td>CFO Management budget</td></tr>
+          <tr><td class="dim">Timeline</td><td>Continuous; no end date</td><td>Training delivery March–November 2026</td></tr>
+          <tr><td class="dim">Relationship</td><td>Experiments → validates → feeds learnings back</td><td>Scales proven approaches</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Skills Library -->
+    <div class="diagram-section">
+      <h3><span class="icon">&#128230;</span> Use Case & Skills Library</h3>
+      <p style="font-size: 12px; color: #666; margin-bottom: 4px;">A DevOps repository where employees browse, download, and contribute reusable AI assets. Contribute-back model — institutional AI knowledge compounds over time.</p>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="sk-icon">&#128295;</div>
+          <div class="sk-title">Skills</div>
+          <div class="sk-desc">Downloadable MD files with prompt templates, agent configurations, and workflow automations. Like apps — find one, download, use.</div>
+        </div>
+        <div class="skill-card">
+          <div class="sk-icon">&#128161;</div>
+          <div class="sk-title">Use Cases</div>
+          <div class="sk-desc">Documented examples of AI solving real Falck problems. Problem statement, approach, tool, result. Inspiration + proof points.</div>
+        </div>
+        <div class="skill-card">
+          <div class="sk-icon">&#128172;</div>
+          <div class="sk-title">Prompts</div>
+          <div class="sk-desc">Tested, refined prompts for common tasks — writing summaries, analysing data, drafting communications. Copy and adapt.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open Questions -->
+    <div class="diagram-section">
+      <h3><span class="icon">&#10067;</span> Open Strategic Questions</h3>
+      <ol class="questions-list">
+        <li><strong>AI First definition document</strong> — One-pager defining AI First state: behaviours, tools, what it looks like per role. Rabia to draft.</li>
+        <li><strong>Felipe alignment</strong> — Meeting needed to confirm AI First as goal-state framing (vs. department-only initiative).</li>
+        <li><strong>Use case / skills library</strong> — DevOps repo with downloadable MD skills files. Form factor and governance TBD.</li>
+        <li><strong>Community channel</strong> — Teams chat (not Teams group) for sharing AI findings, use cases, quick wins.</li>
+        <li><strong>Structured interviews</strong> — Systematise with consistent questions, coded data, actionable outputs feeding back into training design.</li>
+        <li><strong>Student assistant profile</strong> — Non-technical; good at explaining and engaging; interested in AI; 185 DKK/hr.</li>
+        <li><strong>Post-training follow-up</strong> — Exit survey opt-in, health sessions, or ongoing support to ensure agents get created and used.</li>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Last updated: 24 March 2026</div>
+</div>
+
+</div><!-- /page-wrap -->
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  const btns = document.querySelectorAll('.tab-btn');
+  if (tab === 'landscape') btns[0].classList.add('active');
+  else btns[1].classList.add('active');
+}
+
+function togglePillar(name) {
+  const cards = ['trainings', 'solutions', 'knowledge'];
+  cards.forEach(c => {
+    const card = document.getElementById('pc-' + c);
+    const detail = document.getElementById('detail-' + c);
+    if (c === name && !card.classList.contains('active')) {
+      card.classList.add('active');
+      detail.classList.add('active');
+    } else {
+      card.classList.remove('active');
+      detail.classList.remove('active');
+    }
+  });
+}
+</script>
+
+</body>
+</html>
